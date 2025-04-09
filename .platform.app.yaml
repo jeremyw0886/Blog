@@ -1,19 +1,28 @@
 name: app
 type: python:3.11
-relationships:
-  database: "db:postgresql"
 disk: 512
-web:
-  commands:
-    start: gunicorn Blog.wsgi:application --workers 2
-  mounts:
-    "/static": { source: local, source_path: staticfiles }
-    "/media": { source: local, source_path: media }
-    "/logs": { source: local, source_path: logs }
+
+mounts:
+  '/media': 'shared:files/media' 
+
+relationships:
+  database: 'db:postgresql'
+
 hooks:
   build: |
-    python3 -m pip install --upgrade pip
-    python3 -m pip install -r requirements.txt
-    python3 manage.py collectstatic --noinput
+    pip install -r requirements.txt
+    python manage.py collectstatic --noinput
   deploy: |
-    python3 manage.py migrate --noinput
+    python manage.py migrate --noinput
+
+web:
+  locations:
+    '/':
+      root: ''
+      passthru: true
+    '/static':
+      root: 'staticfiles'
+      expires: 1h
+    '/media':
+      root: 'media'
+      expires: 1h
