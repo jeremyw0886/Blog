@@ -1,5 +1,5 @@
 name: "ll_project"
-type: "python:3.10"
+type: "python:3.11" 
 source:
     root: "Blog"
 
