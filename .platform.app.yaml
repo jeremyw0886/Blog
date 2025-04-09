@@ -5,6 +5,10 @@ disk: 512
 relationships:
   database: 'db:postgresql'
 
+mounts:
+  '/media': 'shared:files/media'
+  '/staticfiles': 'shared:files/static'
+
 hooks:
   build: |
     pip install -r requirements.txt
@@ -15,3 +19,12 @@ hooks:
 web:
   commands:
     start: "gunicorn Blog.wsgi:application --bind 0.0.0.0:$PORT"
+  locations:
+    '/':
+      passthru: true
+    '/static':
+      root: 'staticfiles'
+      expires: 1h
+    '/media':
+      root: 'media'
+      expires: 1h
