@@ -31,3 +31,10 @@ mounts:
     "/media": "shared:files"
 
 disk: 2048
+
+relationships:
+    database: "db:postgresql"
+
+variables:
+    env:
+        DJANGO_SETTINGS_MODULE: "Blog.settings"
