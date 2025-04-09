@@ -30,13 +30,18 @@ SECRET_KEY = config('SECRET_KEY', default="django-insecure-#sw80_jwl031)^!54ecrd
 DEBUG = config('DEBUG', default=False, cast=bool)
 
 # Base allowed hosts
-ALLOWED_HOSTS = ['localhost', '127.0.0.1']
+ALLOWED_HOSTS = [
+    'localhost',
+    '127.0.0.1',
+    'main-bvxea6i-2hqacq3d4sf2m.us-4.platformsh.site',
+    'www.main-bvxea6i-2hqacq3d4sf2m.us-4.platformsh.site',
+]
 
 # Load from environment variable (optional)
 if 'ALLOWED_HOSTS' in os.environ:
     ALLOWED_HOSTS.extend(config('ALLOWED_HOSTS', cast=lambda v: [s.strip() for s in v.split(',')]))
 
-# Platform.sh dynamic routes with robust parsing
+# Platform.sh dynamic routes with robust parsing (still included for flexibility)
 if 'PLATFORM_ROUTES' in os.environ:
     try:
         routes = json.loads(os.environ['PLATFORM_ROUTES'])
