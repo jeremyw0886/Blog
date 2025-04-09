@@ -10,7 +10,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 # Security settings
 SECRET_KEY = os.environ.get('SECRET_KEY', 'django-insecure-#sw80_jwl031)^!54ecrd$ltatqkw3x-&w^029_n+9*w^!!&b1')
-DEBUG = True  # Set to True for now to see errors
+DEBUG = True  # Set to True for now to debug
 
 # Allowed hosts
 ALLOWED_HOSTS = [
@@ -66,7 +66,7 @@ TEMPLATES = [
 
 WSGI_APPLICATION = "Blog.wsgi.application"
 
-# Database
+# Database (SQLite locally, PostgreSQL on Platform.sh)
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.sqlite3",
@@ -91,7 +91,7 @@ USE_TZ = True
 # Static files
 STATIC_URL = "/static/"
 STATICFILES_DIRS = [BASE_DIR / "blogs" / "static"]
-STATIC_ROOT = BASE_DIR / "staticfiles"
+STATIC_ROOT = BASE_DIR / "static"
 STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
 # Media files
@@ -105,28 +105,29 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 LOGIN_REDIRECT_URL = "blogs:community"
 LOGOUT_REDIRECT_URL = "blogs:index"
 
-#Platform.sh settings
-from platformshconfig import Config
-
-config = Config()
-if config.is_valid_platform():
-    ALLOWED_HOSTS.append('.platformsh.site')
-    DEBUG = False
-
-    if config.appDir:
-        STATIC_ROOT = Path(config.appDir) / 'static'
-    if config.projectEntropy:
-        SECRET_KEY = config.projectEntropy
-
-    if not config.in_build():
-        db_settings = config.credentials('database')
-        DATABASES = {
-            'default': {
-                'ENGINE': 'django.db.backends.postgresql',
-                'NAME': db_settings['path'],
-                'USER': db_settings['username'],
-                'PASSWORD': db_settings['password'],
-                'HOST': db_settings['host'],
-                'PORT': db_settings['port'],
+# Platform.sh settings
+try:
+    from platformshconfig import Config
+    config = Config()
+    if config.is_valid_platform():
+        ALLOWED_HOSTS.append('.platformsh.site')
+        DEBUG = False
+        if config.appDir:
+            STATIC_ROOT = Path(config.appDir) / 'static'
+            MEDIA_ROOT = Path(config.appDir) / 'media'
+        if config.projectEntropy:
+            SECRET_KEY = config.projectEntropy
+        if not config.in_build():
+            db_settings = config.credentials('database')
+            DATABASES = {
+                'default': {
+                    'ENGINE': 'django.db.backends.postgresql',
+                    'NAME': db_settings['path'],
+                    'USER': db_settings['username'],
+                    'PASSWORD': db_settings['password'],
+                    'HOST': db_settings['host'],
+                    'PORT': db_settings['port'],
+                }
             }
-        }
+except ImportError:
+    pass  # Use SQLite locally if platformshconfig isn’t available
