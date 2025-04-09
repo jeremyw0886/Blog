@@ -4,6 +4,7 @@ Django settings for Blog project.
 
 import os
 from pathlib import Path
+import dj_database_url
 
 # Build paths
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -68,14 +69,7 @@ WSGI_APPLICATION = "Blog.wsgi.application"
 
 # Database
 DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.postgresql",
-        "NAME": os.environ.get("DATABASE_NAME", "blog_db"),
-        "USER": os.environ.get("DATABASE_USER", "blog_user"),
-        "PASSWORD": os.environ.get("DATABASE_PASSWORD", "blog_password"),
-        "HOST": os.environ.get("DATABASE_HOST", "localhost"),
-        "PORT": os.environ.get("DATABASE_PORT", "5432"),
-    }
+    'default': dj_database_url.config(default='postgres://blog_user:blog_password@localhost:5432/blog_db')
 }
 
 # Password validation
