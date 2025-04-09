@@ -20,7 +20,7 @@ web:
   upstream:
     socket_family: unix
   commands:
-    start: "gunicorn Blog.wsgi:application --bind 0.0.0.0:$PORT"
+    start: "gunicorn Blog.wsgi:application --bind 0.0.0.0:8080"
   locations:
     '/':
       passthru: true
