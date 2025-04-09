@@ -3,7 +3,8 @@ type: python:3.11
 disk: 512
 
 mounts:
-  '/media': 'shared:files/media' 
+  '/media': 'shared:files/media'
+  '/staticfiles': 'shared:files/static'
 
 relationships:
   database: 'db:postgresql'
@@ -16,9 +17,12 @@ hooks:
     python manage.py migrate --noinput
 
 web:
+  upstream:
+    socket_family: unix
+  commands:
+    start: "gunicorn Blog.wsgi:application --bind 0.0.0.0:$PORT"
   locations:
     '/':
-      root: ''
       passthru: true
     '/static':
       root: 'staticfiles'
