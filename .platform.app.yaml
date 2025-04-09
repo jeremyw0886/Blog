@@ -1,21 +1,19 @@
-name: django-app
+name: inkstack
 
-type: "python:3.12"
-
-dependencies:
-    python:
-        pip: ">=23.0.0"
-
-build:
-    flavor: none
+type: "python:3.12.7"
 
 hooks:
     build: |
+        ppip install --upgrade pip
         pip install -r requirements.txt
+        pip install -r requirements_remote.txt
+
+        mkdir logs
+        python manage.py collectstatic
+        rm -rf logs
 
     post_deploy: |
-        python manage.py migrate --noinput
-        python manage.py collectstatic --noinput
+        python manage.py migrate 
 
 web:
     commands:
