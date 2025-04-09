@@ -1,0 +1,66 @@
+{% extends 'blogs/base.html' %}
+{% load django_bootstrap5 %}
+
+{% block title %}{{ blog.title }} | Inkstack{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+  <h2 class="mb-2">{{ blog.title }}</h2>
+  
+  {% if blog.description %}
+  <p class="text-muted">{{ blog.description }}</p>
+  {% endif %}
+
+  <hr>
+
+  {% for post in posts %}
+  <div class="card mb-4">
+    <div class="card-body">
+      <h4 class="card-title">{{ post.title }}</h4>
+      <p class="card-text">{{ post.content|safe }}</p>
+      <p class="text-muted small">Posted on {{ post.created_at|date:"M d, Y" }}</p>
+
+      <div class="d-flex gap-3 mt-3 reaction-buttons" data-post-id="{{ post.id }}">
+        <button class="btn-emoji" data-post-id="{{ post.id }}" data-reaction="like">👍
+          <span>{{ post.likes }}</span></button>
+        <button class="btn-emoji" data-post-id="{{ post.id }}" data-reaction="love">❤️
+          <span>{{ post.loves }}</span></button>
+        <button class="btn-emoji" data-post-id="{{ post.id }}" data-reaction="laugh">😂
+          <span>{{ post.laughs }}</span></button>
+        <button class="btn-emoji" data-post-id="{{ post.id }}" data-reaction="sad">😢
+          <span>{{ post.sads }}</span></button>
+      </div>
+
+      <!-- Comments for this post -->
+      <div class="mt-4">
+        <h6>Comments</h6>
+        {% for comment in post.comments.all %}
+        <div class="mb-2 border-bottom pb-2">
+          <p class="mb-0"><strong>{{ comment.user.username|default:"Guest" }}</strong>:</p>
+          <p class="mb-0">{{ comment.content }}</p>
+        </div>
+        {% empty %}
+        <p class="text-muted">No comments yet.</p>
+        {% endfor %}
+      </div>
+
+      <!-- Add Comment -->
+      {% if user.is_authenticated %}
+      <form method="post" class="mt-3">
+        {% csrf_token %}
+        <input type="hidden" name="post_id" value="{{ post.id }}">
+        {% bootstrap_form form %}
+        <button type="submit" class="btn btn-sm btn-primary">Leave Comment</button>
+      </form>
+      {% else %}
+      <p><a href="{% url 'accounts:login' %}?next={{ request.path }}">Log in</a> to comment.</p>
+      {% endif %}
+    </div>
+  </div>
+  {% empty %}
+  <p>No public posts in this blog.</p>
+  {% endfor %}
+
+  <a href="{% url 'blogs:community' %}" class="btn btn-link mb-3">&larr; Back to Community</a>
+</div>
+{% endblock %}

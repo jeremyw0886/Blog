@@ -1,0 +1,23 @@
+{% extends 'blogs/base.html' %}
+{% load django_bootstrap5 %}
+
+{% block title %}New Blog{% endblock %}
+
+{% block page_header %}
+  <h2>Create a New Blog</h2>
+{% endblock page_header %}
+
+{% block content %}
+<a href="{% url 'blogs:index' %}" class="btn btn-link mb-3">&larr; Back to Dashboard</a>
+<div class="row justify-content-center">
+  <div class="col-md-8 col-lg-6">
+    <form method="post" class="border rounded p-4 shadow-sm bg-light">
+      {% csrf_token %}
+      {% bootstrap_form form %}
+      <div class="d-grid mt-3">
+        <button type="submit" class="btn btn-success">Create Blog</button>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock content %}

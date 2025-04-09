@@ -1,0 +1,76 @@
+{% extends 'blogs/base.html' %}
+{% block title %}{{ post.title }}{% endblock %}
+{% load humanize %}
+
+{% block page_header %}
+<h1>{{ post.blog.title }}</h1>
+{% endblock page_header %}
+
+{% block content %}
+<ul>
+  <li><span>Post: <strong>{{ post.title }}</strong></span></li>
+  <li><span>Date: <strong>{{ post.created_at|date:"F j, Y" }}</strong></span></li>
+  <li><span>Tags:
+      {% for tag in post.tags.all %}
+      <span class="bg-secondary"><strong class="tags">#{{ tag.name }}</strong></span>
+      {% empty %}
+      <span class="text-muted">No tags</span>
+      {% endfor %}
+    </span></li>
+</ul>
+
+<div class="border rounded p-4 bg-light">
+  <p>{{ post.content|safe }}</p>
+</div>
+
+<div class="d-flex gap-3 mt-3 reaction-buttons" data-post-id="{{ post.id }}">
+  <button class="btn-emoji" data-post-id="{{ post.id }}" data-reaction="like">👍
+    <span>{{ post.likes }}</span></button>
+  <button class="btn-emoji" data-post-id="{{ post.id }}" data-reaction="love">❤️
+    <span>{{ post.loves }}</span></button>
+  <button class="btn-emoji" data-post-id="{{ post.id }}" data-reaction="laugh">😂
+    <span>{{ post.laughs }}</span></button>
+  <button class="btn-emoji" data-post-id="{{ post.id }}" data-reaction="sad">😢
+    <span>{{ post.sads }}</span></button>
+</div>
+
+<hr />
+<h4>Comments</h4>
+
+
+{% for comment in comments %}
+<div id="comment-{{ comment.id }}" class="mb-3 p-2 border rounded bg-light position-relative">
+  <strong>{{ comment.user.username }}</strong> •
+  <span class="text-muted small">{{ comment.created_at|naturaltime }}</span>
+  <p class="mb-1">{{ comment.content }}</p>
+
+  {% if comment.user == user %}
+  <button class="btn-close position-absolute top-0 end-0 m-2 delete-comment-btn" data-comment-id="{{ comment.id }}"
+    aria-label="Delete"></button>
+  {% endif %}
+</div>
+{% empty %}
+<p>No comments yet. Be the first!</p>
+{% endfor %}
+<hr />
+
+{% if user.is_authenticated %}
+<form method="post">
+  {% csrf_token %}
+  {{ form.as_p }}
+  <button type="submit" class="btn btn-primary btn-sm mt-2">Post Comment</button>
+</form>
+{% else %}
+<p><a href="{% url 'accounts:login' %}">Log in</a> to post a comment.</p>
+{% endif %}
+
+{% if comment.author == user %}
+<a href="{% url 'blogs:edit_comment' comment.id %}" class="btn btn-sm btn-outline-secondary">
+  Edit
+</a>
+{% endif %}
+<div class="post-back-btn">
+  <a href="{% url 'blogs:community' %}" class="btn btn-link mb-3">&larr; Back to Community</a>
+</div>
+
+{% endblock content %}

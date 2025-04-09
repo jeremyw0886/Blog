@@ -1,0 +1,10 @@
+{% extends "blogs/base.html" %}
+{% block title %}Page Not Found{% endblock %}
+
+{% block content %}
+<div class="text-center mt-5">
+  <h1 class="display-1 text-danger" data-aos="fade-up">404</h1>
+  <p class="lead">Oops! The page you're looking for doesn't exist.</p>
+  <a href="{% url 'blogs:index' %}" class="btn btn-primary mt-3">Return to Dashboard</a>
+</div>
+{% endblock %}

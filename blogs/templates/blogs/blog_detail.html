@@ -1,0 +1,31 @@
+{% extends 'blogs/base.html' %}
+{% load django_bootstrap5 %}
+
+{% block title %}{{ blog.title }}{% endblock %}
+
+{% block content %}
+<div class="card mb-4">
+  <div class="card-body">
+    <h5 class="card-title">Blog Description</h5>
+    <!-- Display Blog Title -->
+    <h2 class="mb-3">{{ blog.title }}</h2>
+
+    <!-- Show editable description for blog owner -->
+    {% if user == blog.owner %}
+    <form method="post" class="mb-4">
+      {% csrf_token %}
+      {{ form.description.label_tag }}
+      {{ form.description }}
+      <button type="submit" class="btn btn-outline-primary mt-2">Update Description</button>
+    </form>
+    {% else %}
+    <!-- Show read-only description for others -->
+      {% if blog.description %}
+      <p class="text-muted">{{ blog.description }}</p>
+      {% else %}
+      <p class="fst-italic text-muted">No description available.</p>
+      {% endif %}
+    {% endif %}
+  </div>
+</div>
+{% endblock content %}

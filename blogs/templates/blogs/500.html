@@ -1,0 +1,10 @@
+{% extends "blogs/base.html" %}
+{% block title %}Server Error{% endblock %}
+
+{% block content %}
+<div class="text-center mt-5">
+  <h1 class="display-1 text-danger" data-aos="fade-up">500</h1>
+  <p class="lead">Something went wrong on our end.</p>
+  <a href="{% url 'blogs:index' %}" class="btn btn-primary mt-3">Return to Dashboard</a>
+</div>
+{% endblock %}

@@ -1,0 +1,22 @@
+{% extends 'blogs/base.html' %}
+{% load django_bootstrap5 %}
+
+{% block title %}Edit Blog & Posts | Inkstack{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+  <h1 class="mb-4">Edit Blog</h1>
+  <a href="{% url 'blogs:index' %}" class="btn btn-link mb-3">&larr; Back to Dashboard</a>
+
+  <!-- Blog Edit Form -->
+  <form method="post">
+    {% csrf_token %}
+    {% bootstrap_form blog_form %}
+    <div class="form-buttons">
+      <button type="submit" class="btn btn-primary">Save Blog</button>
+      <a href="{{ cancel_url }}" class="btn btn-secondary">Cancel</a>
+      <button type="submit" class="btn btn btn-danger" onclick="return confirm('Delete this post?')">Delete</button>
+    </div>
+  </form>
+</div>
+{% endblock %}

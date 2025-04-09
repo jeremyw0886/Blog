@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{% block title %}Inkstack{% endblock %}</title>
+    {% load static %}
+    {% load django_bootstrap5 %}
+    {% bootstrap_css %}
+    {% bootstrap_javascript %}
+    <link rel="stylesheet" href="{% static 'blogs/css/custom.css' %}">
+    <link rel="stylesheet" href="{% static 'blogs/css/aos.css' %}">
+    <script src="{% static 'blogs/js/aos.js' %}"></script>
+    <script src="{% static 'blogs/js/typed.min.js' %}"></script>
+    <script src="{% static 'blogs/js/tinymce/tinymce.min.js' %}"></script>
+  </head>
+
+  <body class="d-flex flex-column min-vh-100">
+    <nav class="navbar navbar-expand-md navbar-light bg-light mb-4 border">
+      <div class="container-fluid">
+        <a class="navbar-brand d-flex align-items-center" href="{% url 'blogs:index' %}">
+          <img src="{% static 'blogs/img/inkstack-logo-light.png' %}" alt="Inkstack Logo" class="logo-img me-2">
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse"
+          aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarCollapse">
+          <ul class="navbar-nav me-auto mb-2 mb-md-0">
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'blogs:index' %}">Dashboard</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'blogs:community' %}">Community</a>
+            </li>
+          </ul>
+          <ul class="navbar-nav ms-auto mb-2 mb-md-0">
+            {% if user.is_authenticated %}
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" id="profileDropdown" role="button"
+                data-bs-toggle="dropdown" aria-expanded="false">
+                <img src="{{ user.profile.get_avatar_url }}" class="rounded-circle me-2" width="40" height="40"
+                  alt="Avatar">
+              </a>
+              <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="profileDropdown">
+                <li><a class="dropdown-item" href="{% url 'blogs:new_blog' %}">📝 New Blog</a></li>
+                <li><a class="dropdown-item" href="{% url 'accounts:update_avatar' %}">🖼️ Change Avatar</a></li>
+                <li>
+                  <hr class="dropdown-divider">
+                </li>
+                <li><a class="dropdown-item" href="{% url 'accounts:profile_detail' user.username %}">👤 My Profile</a>
+                </li>
+                <li>
+                  <form id="logout-form" action="{% url 'accounts:logout' %}" method="post">
+                    {% csrf_token %}
+                    <button type="submit" class="dropdown-item text-danger">🚪 Log Out</button>
+                  </form>
+                </li>
+              </ul>
+            </li>
+            {% else %}
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'accounts:register' %}">Register</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'accounts:login' %}">Log in</a>
+            </li>
+            {% endif %}
+            <li class="nav-item d-flex align-items-center ms-2">
+              <div class="form-check form-switch mb-0">
+                <input class="form-check-input" type="checkbox" id="darkModeToggle">
+                <label class="form-check-label small" for="darkModeToggle">Dark Mode</label>
+              </div>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <main class="container flex-grow-1">
+      <div class="pb-2 mb-4">
+        {% block page_header %}{% endblock page_header %}
+      </div>
+      {% block content %}{% endblock content %}
+    </main>
+
+    <footer class="bg-light border-top text-center py-4">
+      <div class="container">
+        <p class="mb-1"><img src="{% static 'blogs/img/inkstack-logo-light.png' %}" alt="Inkstack Logo"
+            class="logo-img me-2"> © {{ now|date:"Y" }} Inkstack. All rights reserved.</p>
+        <p class="small text-muted">Built with Django & Bootstrap 5 by Jeremy Warren</p>
+      </div>
+    </footer>
+
+    <script src="{% static 'blogs/js/custom.js' %}?v=1.1"></script>
+    <script>
+      AOS.init({
+        duration: 700,
+        easing: 'ease-out-quad',
+        once: true
+      });
+    </script>
+  </body>
+
+</html>

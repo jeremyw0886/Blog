@@ -1,0 +1,24 @@
+{% extends 'blogs/base.html' %}
+{% block title %}Posts tagged "{{ tag.name }}"{% endblock %}
+
+{% block page_header %}
+<h2>Posts tagged <span class="badge bg-info text-dark">{{ tag.name }}</span></h2>
+{% endblock page_header %}
+
+{% block content %}
+<div class="row row-cols-1 g-4">
+  {% for post in posts %}
+  <div class="col">
+    <div class="card shadow-sm">
+      <div class="card-body">
+        <h5 class="card-title">{{ post.title }}</h5>
+        <p class="card-text text-muted">{{ post.content|striptags|truncatechars:150 }}</p>
+        <a href="{% url 'blogs:post_detail' post.id %}" class="btn btn-sm btn-outline-primary">Read more</a>
+      </div>
+    </div>
+  </div>
+  {% empty %}
+  <div class="alert alert-info">No posts found with this tag.</div>
+  {% endfor %}
+</div>
+{% endblock content %}

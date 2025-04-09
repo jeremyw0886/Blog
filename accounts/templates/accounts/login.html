@@ -1,0 +1,21 @@
+{% extends 'blogs/base.html' %}
+{% load django_bootstrap5 %}
+
+{% block page_header %}
+<h2>Log in to your account.</h2>
+{% endblock page_header %}
+
+{% block content %}
+<form action="{% url 'accounts:login' %}" method="post">
+  {% csrf_token %}
+  {% bootstrap_form form %}
+  {% bootstrap_button button_type="submit" content="Log in" %}
+  <input type="hidden" name="next" value="{{ next }}">
+</form>
+
+<p class="mt-3 text-center">
+  Don't have an account?
+  <a href="{% url 'accounts:register' %}" class="text-primary fw-bold">Register here</a>
+</p>
+
+{% endblock content %}
