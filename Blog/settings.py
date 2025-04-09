@@ -11,7 +11,6 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 """
 
 import os
-import json
 import logging
 from pathlib import Path
 from decouple import config
@@ -24,42 +23,22 @@ logger = logging.getLogger(__name__)
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = config(
-    "SECRET_KEY",
-    default="django-insecure-#sw80_jwl031)^!54ecrd$ltatqkw3x-&w^029_n+9*w^!!&b1",
-)
+SECRET_KEY = config('SECRET_KEY', default="django-insecure-#sw80_jwl031)^!54ecrd$ltatqkw3x-&w^029_n+9*w^!!&b1")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = config("DEBUG", default=False, cast=bool)
+DEBUG = config('DEBUG', default=False, cast=bool)
 
-# Base allowed hosts with hardcoded Platform.sh domains
+# Simplified ALLOWED_HOSTS with hardcoded Platform.sh domains
 ALLOWED_HOSTS = [
-    "localhost",
-    "127.0.0.1",
-    "main-bvxea6i-2hqacq3d4sf2m.us-4.platformsh.site",
-    "www.main-bvxea6i-2hqacq3d4sf2m.us-4.platformsh.site",
+    'localhost',
+    '127.0.0.1',
+    'main-bvxea6i-2hqacq3d4sf2m.us-4.platformsh.site',
+    'www.main-bvxea6i-2hqacq3d4sf2m.us-4.platformsh.site',
 ]
 
-# Load from environment variable (optional)
-if "ALLOWED_HOSTS" in os.environ:
-    ALLOWED_HOSTS.extend(
-        config("ALLOWED_HOSTS", cast=lambda v: [s.strip() for s in v.split(",")])
-    )
-
-# Platform.sh dynamic routes with robust parsing
-if "PLATFORM_ROUTES" in os.environ:
-    try:
-        routes = json.loads(os.environ["PLATFORM_ROUTES"])
-        if routes:  # Ensure it's not an empty dict
-            for route_url in routes.keys():
-                host = route_url.split("//")[1].rstrip("/")
-                ALLOWED_HOSTS.append(host)
-        else:
-            logger.warning("PLATFORM_ROUTES is empty; skipping dynamic host addition.")
-    except (json.JSONDecodeError, KeyError, ValueError) as e:
-        logger.warning(
-            f"Failed to parse PLATFORM_ROUTES: {e}. Using default ALLOWED_HOSTS."
-        )
+# Optional override from environment variable
+if 'ALLOWED_HOSTS' in os.environ:
+    ALLOWED_HOSTS.extend(config('ALLOWED_HOSTS', cast=lambda v: [s.strip() for s in v.split(',')]))
 
 # Ensure no duplicates
 ALLOWED_HOSTS = list(set(ALLOWED_HOSTS))
@@ -69,9 +48,11 @@ INSTALLED_APPS = [
     # My apps
     "blogs",
     "accounts",
+
     # Third-party apps
     "django_bootstrap5",
     "taggit",
+
     # Django apps
     "django.contrib.admin",
     "django.contrib.auth",
@@ -115,11 +96,9 @@ WSGI_APPLICATION = "Blog.wsgi.application"
 
 # Database
 # Use DATABASE_URL if available (Platform.sh), otherwise fallback to SQLite
-if "DATABASE_URL" in os.environ:
+if 'DATABASE_URL' in os.environ:
     DATABASES = {
-        "default": dj_database_url.config(
-            default=os.environ["DATABASE_URL"], conn_max_age=600
-        )
+        'default': dj_database_url.config(default=os.environ['DATABASE_URL'], conn_max_age=600)
     }
 else:
     DATABASES = {
@@ -131,9 +110,7 @@ else:
 
 # Password validation
 AUTH_PASSWORD_VALIDATORS = [
-    {
-        "NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator"
-    },
+    {"NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator"},
     {"NAME": "django.contrib.auth.password_validation.MinimumLengthValidator"},
     {"NAME": "django.contrib.auth.password_validation.CommonPasswordValidator"},
     {"NAME": "django.contrib.auth.password_validation.NumericPasswordValidator"},
@@ -141,7 +118,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 # Internationalization
 LANGUAGE_CODE = "en-us"
-TIME_ZONE = "UTC"
+TIME_ZONE = "EST"
 USE_I18N = True
 USE_TZ = True
 
