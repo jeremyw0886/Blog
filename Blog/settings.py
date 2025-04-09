@@ -11,16 +11,17 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 """
 
 import os
-import json  # Added as per your update
+import json
+import logging
 from pathlib import Path
 from decouple import config
-import dj_database_url  # Add this for Platform.sh database parsing
+import dj_database_url
+
+# Set up logging
+logger = logging.getLogger(__name__)
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = config('SECRET_KEY', default="django-insecure-#sw80_jwl031)^!54ecrd$ltatqkw3x-&w^029_n+9*w^!!&b1")
@@ -35,12 +36,18 @@ ALLOWED_HOSTS = ['localhost', '127.0.0.1']
 if 'ALLOWED_HOSTS' in os.environ:
     ALLOWED_HOSTS.extend(config('ALLOWED_HOSTS', cast=lambda v: [s.strip() for s in v.split(',')]))
 
-# Platform.sh dynamic routes
+# Platform.sh dynamic routes with robust parsing
 if 'PLATFORM_ROUTES' in os.environ:
-    routes = json.loads(os.environ['PLATFORM_ROUTES'])
-    for route_url in routes.keys():
-        host = route_url.split('//')[1].rstrip('/')
-        ALLOWED_HOSTS.append(host)
+    try:
+        routes = json.loads(os.environ['PLATFORM_ROUTES'])
+        if routes:  # Ensure it's not an empty dict
+            for route_url in routes.keys():
+                host = route_url.split('//')[1].rstrip('/')
+                ALLOWED_HOSTS.append(host)
+        else:
+            logger.warning("PLATFORM_ROUTES is empty; skipping dynamic host addition.")
+    except (json.JSONDecodeError, KeyError, ValueError) as e:
+        logger.warning(f"Failed to parse PLATFORM_ROUTES: {e}. Using default ALLOWED_HOSTS.")
 
 # Ensure no duplicates
 ALLOWED_HOSTS = list(set(ALLOWED_HOSTS))
@@ -54,7 +61,6 @@ INSTALLED_APPS = [
     # Third-party apps
     "django_bootstrap5",
     "taggit",
-    # "decouple",  # This is not an app, remove it from INSTALLED_APPS
 
     # Django apps
     "django.contrib.admin",
@@ -98,19 +104,10 @@ TEMPLATES = [
 WSGI_APPLICATION = "Blog.wsgi.application"
 
 # Database
-# Use Platform.sh PostgreSQL if available, otherwise fallback to SQLite
-if 'PLATFORM_RELATIONSHIPS' in os.environ:
-    relationships = json.loads(os.environ['PLATFORM_RELATIONSHIPS'])
-    db_config = relationships['database'][0]  # Assumes 'database' is the relationship name
+# Use DATABASE_URL if available (Platform.sh), otherwise fallback to SQLite
+if 'DATABASE_URL' in os.environ:
     DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.postgresql',
-            'NAME': db_config['path'],
-            'USER': db_config['username'],
-            'PASSWORD': db_config['password'],
-            'HOST': db_config['host'],
-            'PORT': db_config['port'],
-        }
+        'default': dj_database_url.config(default=os.environ['DATABASE_URL'], conn_max_age=600)
     }
 else:
     DATABASES = {
@@ -138,7 +135,7 @@ USE_TZ = True
 STATIC_URL = "/static/"
 STATICFILES_DIRS = [BASE_DIR / "blogs" / "static"]
 STATIC_ROOT = BASE_DIR / "staticfiles"
-STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"  # Use whitenoise
+STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
 # Media files
 MEDIA_URL = "/media/"
