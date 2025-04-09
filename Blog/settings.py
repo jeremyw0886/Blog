@@ -4,7 +4,6 @@ Django settings for Blog project.
 
 import os
 from pathlib import Path
-import dj_database_url
 
 # Build paths
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -69,10 +68,10 @@ WSGI_APPLICATION = "Blog.wsgi.application"
 
 # Database
 DATABASES = {
-    'default': dj_database_url.config(
-        default='postgres://blog_user:blog_password@localhost:5432/blog_db',
-        conn_max_age=600
-    )
+    "default": {
+        "ENGINE": "django.db.backends.sqlite3",
+        "NAME": BASE_DIR / "db.sqlite3",
+    }
 }
 
 # Password validation
@@ -105,3 +104,29 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 # Custom settings
 LOGIN_REDIRECT_URL = "blogs:community"
 LOGOUT_REDIRECT_URL = "blogs:index"
+
+#Platform.sh settings
+from platformshconfig import Config
+
+config = Config()
+if config.is_valid_platform():
+    ALLOWED_HOSTS.append('.platformsh.site')
+    DEBUG = False
+
+    if config.appDir:
+        STATIC_ROOT = Path(config.appDir) / 'static'
+    if config.projectEntropy:
+        SECRET_KEY = config.projectEntropy
+
+    if not config.in_build():
+        db_settings = config.credentials('database')
+        DATABASES = {
+            'default': {
+                'ENGINE': 'django.db.backends.postgresql',
+                'NAME': db_settings['path'],
+                'USER': db_settings['username'],
+                'PASSWORD': db_settings['password'],
+                'HOST': db_settings['host'],
+                'PORT': db_settings['port'],
+            }
+        }
