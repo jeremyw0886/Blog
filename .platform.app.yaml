@@ -1,6 +1,6 @@
 name: inkstack
 
-type: "python:3.12.7"
+type: "python:3.12"
 
 hooks:
     build: |
