@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 
 import os
 from pathlib import Path
+from decouple import config
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -28,12 +29,22 @@ SECRET_KEY = (
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = [
-    'main-bvxea6i-2hqacq3d4sf2m.us-4.platformsh.site',
-    'www.main-bvxea6i-2hqacq3d4sf2m.us-4.platformsh.site',  # If you’re using the www variant
-    'localhost',  # For local development
-    '127.0.0.1',  # For local development
-]
+# Base allowed hosts
+ALLOWED_HOSTS = ['localhost', '127.0.0.1']
+
+# Load from environment variable (optional)
+if 'ALLOWED_HOSTS' in os.environ:
+    ALLOWED_HOSTS.extend(config('ALLOWED_HOSTS', cast=lambda v: [s.strip() for s in v.split(',')]))
+
+# Platform.sh dynamic routes
+if 'PLATFORM_ROUTES' in os.environ:
+    routes = json.loads(os.environ['PLATFORM_ROUTES'])
+    for route_url in routes.keys():
+        host = route_url.split('//')[1].rstrip('/')
+        ALLOWED_HOSTS.append(host)
+
+# Ensure no duplicates
+ALLOWED_HOSTS = list(set(ALLOWED_HOSTS))
 
 # Application definition
 
