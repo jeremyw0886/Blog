@@ -4,13 +4,13 @@
 /* ========================================================================== */
 @font-face {
   font-family: 'Lato';
-  src: url('/static/blogs/fonts/lato-regular.woff2') format('woff2');
+  src: url('../fonts/Lato/Lato-Regular.ttf') format('truetype');
   font-weight: normal;
   font-style: normal;
 }
 @font-face {
   font-family: 'Poppins';
-  src: url('/static/blogs/fonts/poppins-600.woff2') format('woff2');
+  src: url('../fonts/Poppins/Poppins-SemiBold.ttf') format('truetype');
   font-weight: 600;
   font-style: normal;
 }
