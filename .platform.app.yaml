@@ -1,47 +1,35 @@
-name: "ll_project"
-type: "python:3.11" 
-source:
-    root: "Blog"
+name: django-app
 
-relationships:
-    database: "db:postgresql"
+type: "python:3.12"
 
-web:
-    upstream:
-        socket_family: unix
-    commands:
-        start: "gunicorn -w 4 -b unix:$SOCKET Blog.wsgi:application"
-    locations:
-        "/":
-            passthru: true
-        "/static":
-            root: "static"
-            expires: 1h
-            allow: true
-        "/media":
-            root: "media"
-            expires: 1h
-            allow: true
+dependencies:
+    python:
+        pip: ">=23.0.0"
 
-disk: 512
-
-mounts:
-    "media":
-        source: local
-        source_path: media
-    "static":
-        source: local
-        source_path: static
-    "logs":
-        source: local
-        source_path: logs
+build:
+    flavor: none
 
 hooks:
     build: |
-        pip install --upgrade pip
         pip install -r requirements.txt
-        pip install -r requirements_remote.txt
-        mkdir -p static media logs
-        python manage.py collectstatic --noinput
-    deploy: |
+
+    post_deploy: |
         python manage.py migrate --noinput
+        python manage.py collectstatic --noinput
+
+web:
+    commands:
+        start: gunicorn Blog.wsgi:application --bind 0.0.0.0:$PORT
+
+    locations:
+        "/":
+            root: "static"
+            passthru: true
+        "/media":
+            root: "media"
+            allow: true
+
+mounts:
+    "/media": "shared:files"
+
+disk: 2048
