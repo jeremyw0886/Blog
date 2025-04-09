@@ -26,10 +26,14 @@ SECRET_KEY = (
 )
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = ["127.0.0.1", "localhost"]
-
+ALLOWED_HOSTS = [
+    'main-bvxea6i-2hqacq3d4sf2m.us-4.platformsh.site',
+    'www.main-bvxea6i-2hqacq3d4sf2m.us-4.platformsh.site',  # If you’re using the www variant
+    'localhost',  # For local development
+    '127.0.0.1',  # For local development
+]
 
 # Application definition
 
