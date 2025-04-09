@@ -11,7 +11,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 # Security settings
 SECRET_KEY = os.environ.get('SECRET_KEY', 'django-insecure-#sw80_jwl031)^!54ecrd$ltatqkw3x-&w^029_n+9*w^!!&b1')
-DEBUG = os.environ.get('DEBUG', 'False') == 'True'
+DEBUG = True  # Set to True for now to see errors
 
 # Allowed hosts
 ALLOWED_HOSTS = [
@@ -69,7 +69,10 @@ WSGI_APPLICATION = "Blog.wsgi.application"
 
 # Database
 DATABASES = {
-    'default': dj_database_url.config(default='postgres://blog_user:blog_password@localhost:5432/blog_db')
+    'default': dj_database_url.config(
+        default='postgres://blog_user:blog_password@localhost:5432/blog_db',
+        conn_max_age=600
+    )
 }
 
 # Password validation
