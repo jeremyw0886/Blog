@@ -11,24 +11,22 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 """
 
 import os
-import json
+import json  # Added as per your update
 from pathlib import Path
 from decouple import config
+import dj_database_url  # Add this for Platform.sh database parsing
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = (
-    "django-insecure-#sw80_jwl031)^!54ecrd$ltatqkw3x-&w^029_n+9*w^!!&b1"
-)
+SECRET_KEY = config('SECRET_KEY', default="django-insecure-#sw80_jwl031)^!54ecrd$ltatqkw3x-&w^029_n+9*w^!!&b1")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = config('DEBUG', default=False, cast=bool)
 
 # Base allowed hosts
 ALLOWED_HOSTS = ['localhost', '127.0.0.1']
@@ -48,18 +46,17 @@ if 'PLATFORM_ROUTES' in os.environ:
 ALLOWED_HOSTS = list(set(ALLOWED_HOSTS))
 
 # Application definition
-
 INSTALLED_APPS = [
-    # my app.
+    # My apps
     "blogs",
     "accounts",
 
-    # Third-party apps.
+    # Third-party apps
     "django_bootstrap5",
     "taggit",
-    "decouple",
-    
-    # Django apps.
+    # "decouple",  # This is not an app, remove it from INSTALLED_APPS
+
+    # Django apps
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -100,70 +97,56 @@ TEMPLATES = [
 
 WSGI_APPLICATION = "Blog.wsgi.application"
 
-
 # Database
-# https://docs.djangoproject.com/en/5.1/ref/settings/#databases
-
-DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "db.sqlite3",
+# Use Platform.sh PostgreSQL if available, otherwise fallback to SQLite
+if 'PLATFORM_RELATIONSHIPS' in os.environ:
+    relationships = json.loads(os.environ['PLATFORM_RELATIONSHIPS'])
+    db_config = relationships['database'][0]  # Assumes 'database' is the relationship name
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql',
+            'NAME': db_config['path'],
+            'USER': db_config['username'],
+            'PASSWORD': db_config['password'],
+            'HOST': db_config['host'],
+            'PORT': db_config['port'],
+        }
     }
-}
-
+else:
+    DATABASES = {
+        "default": {
+            "ENGINE": "django.db.backends.sqlite3",
+            "NAME": BASE_DIR / "db.sqlite3",
+        }
+    }
 
 # Password validation
-# https://docs.djangoproject.com/en/5.1/ref/settings/#auth-password-validators
-
 AUTH_PASSWORD_VALIDATORS = [
-    {
-        "NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator",
-    },
-    {
-        "NAME": "django.contrib.auth.password_validation.MinimumLengthValidator",
-    },
-    {
-        "NAME": "django.contrib.auth.password_validation.CommonPasswordValidator",
-    },
-    {
-        "NAME": "django.contrib.auth.password_validation.NumericPasswordValidator",
-    },
+    {"NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator"},
+    {"NAME": "django.contrib.auth.password_validation.MinimumLengthValidator"},
+    {"NAME": "django.contrib.auth.password_validation.CommonPasswordValidator"},
+    {"NAME": "django.contrib.auth.password_validation.NumericPasswordValidator"},
 ]
 
-
 # Internationalization
-# https://docs.djangoproject.com/en/5.1/topics/i18n/
-
 LANGUAGE_CODE = "en-us"
-
 TIME_ZONE = "UTC"
-
 USE_I18N = True
-
 USE_TZ = True
 
-
 # Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/5.1/howto/static-files/
+STATIC_URL = "/static/"
+STATICFILES_DIRS = [BASE_DIR / "blogs" / "static"]
+STATIC_ROOT = BASE_DIR / "staticfiles"
+STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"  # Use whitenoise
 
-STATIC_URL = "static/"
+# Media files
+MEDIA_URL = "/media/"
+MEDIA_ROOT = BASE_DIR / "media"
 
 # Default primary key field type
-# https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
-
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 # My Settings
 LOGIN_REDIRECT_URL = "blogs:community"
 LOGOUT_REDIRECT_URL = "blogs:index"
-
-MEDIA_URL = "/media/"
-MEDIA_ROOT = BASE_DIR / "media"
-
-STATICFILES_DIRS = [BASE_DIR / "blogs" / "static"]
-
-STATIC_ROOT = BASE_DIR / "staticfiles"
-
-STATICFILES_STORAGE = (
-    "django.contrib.staticfiles.storage.ManifestStaticFilesStorage"
-)
