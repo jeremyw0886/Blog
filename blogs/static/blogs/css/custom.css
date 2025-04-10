@@ -404,7 +404,8 @@ body.dark-mode h5,
 body.dark-mode h6,
 body.dark-mode span,
 body.dark-mode .text-muted,
-body.dark-mode .form-text {
+body.dark-mode .form-text,
+body.dark-mode p {
   color: #f1f1f1 !important;
 }
 
