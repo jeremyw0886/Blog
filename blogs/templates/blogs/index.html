@@ -53,11 +53,7 @@
               {% if blog_posts %}
               {% for post in blog_posts %}
               <div class="border-top pt-3 mt-3">
-                <div class="d-flex justify-content-between align-items-center mb-3">
-                  <h3 class="card-title mb-0">
-                    <a href="{% url 'blogs:blog_detail' blog.id %}" class="text-decoration-none">{{ blog.title }}</a>
-                  </h3>
-                </div>
+                <h3 class="card-title">{{ post.title }}</h3>
                 <p class="text-muted">{{ post.content|striptags|truncatechars:150 }}</p>
                 <div class="d-flex justify-content-between align-items-center">
                   <div class="form-buttons">
