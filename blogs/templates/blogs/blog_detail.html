@@ -4,9 +4,10 @@
 {% block title %}{{ blog.title }}{% endblock %}
 
 {% block content %}
+<h2 class="card-title">Blog Description</h2>
+<a href="{% url 'blogs:index' %}" class="btn btn-link mb-3">&larr; Back to Dashboard</a>
+
 <div class="card mb-4">
-  <h2 class="card-title">Blog Description</h2>
-  <a href="{% url 'blogs:index' %}" class="btn btn-link mb-3">&larr; Back to Dashboard</a>
   <div class="card-body">
     <!-- Display Blog Title -->
     <h3 class="mb-3">{{ blog.title }}</h3>
