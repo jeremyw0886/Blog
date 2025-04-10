@@ -5,10 +5,11 @@
 
 {% block content %}
 <div class="card mb-4">
+  <h2 class="card-title">Blog Description</h2>
+  <a href="{% url 'blogs:index' %}" class="btn btn-link mb-3">&larr; Back to Dashboard</a>
   <div class="card-body">
-    <h5 class="card-title">Blog Description</h5>
     <!-- Display Blog Title -->
-    <h2 class="mb-3">{{ blog.title }}</h2>
+    <h3 class="mb-3">{{ blog.title }}</h3>
 
     <!-- Show editable description for blog owner -->
     {% if user == blog.owner %}
@@ -16,7 +17,7 @@
       {% csrf_token %}
       {{ form.description.label_tag }}
       {{ form.description }}
-      <button type="submit" class="btn btn-outline-primary mt-2">Update Description</button>
+      <button type="submit" class="btn btn-primary mt-2">Update Description</button>
     </form>
     {% else %}
     <!-- Show read-only description for others -->
