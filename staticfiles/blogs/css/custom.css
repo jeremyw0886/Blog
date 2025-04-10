@@ -1,16 +1,15 @@
-
 /* ========================================================================== */
 /* Fonts                                                              */
 /* ========================================================================== */
 @font-face {
-  font-family: 'Lato';
-  src: url('../fonts/Lato/Lato-Regular.ttf') format('truetype');
+  font-family: "Lato";
+  src: url("../fonts/Lato/Lato-Regular.ttf") format("truetype");
   font-weight: normal;
   font-style: normal;
 }
 @font-face {
-  font-family: 'Poppins';
-  src: url('../fonts/Poppins/Poppins-SemiBold.ttf') format('truetype');
+  font-family: "Poppins";
+  src: url("../fonts/Poppins/Poppins-SemiBold.ttf") format("truetype");
   font-weight: 600;
   font-style: normal;
 }
@@ -18,6 +17,10 @@
 /* ========================================================================== */
 /* Base Styles                                                                */
 /* ========================================================================== */
+* {
+  box-sizing: border-box;
+}
+
 body {
   background-color: #cfcfcf;
   color: #3d3d3d;
@@ -28,7 +31,13 @@ body {
 /* ========================================================================== */
 /* Headings and Branding                                                      */
 /* ========================================================================== */
-h1, h2, h3, h4, h5, h6, .navbar-brand {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+.navbar-brand {
   font-family: "Poppins", sans-serif;
   color: #2c2e4a;
 }
@@ -36,7 +45,8 @@ h1, h2, h3, h4, h5, h6, .navbar-brand {
 /* ========================================================================== */
 /* Navbar and Footer                                                          */
 /* ========================================================================== */
-.navbar, footer {
+.navbar,
+footer {
   background-color: #f9f3d9;
 }
 
@@ -58,11 +68,23 @@ footer p {
   font-size: 0.875rem;
 }
 
+body.scrolled .navbar {
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* ========================================================================== */
+/* Search Bar                                                                 */
+/* ========================================================================== */
+#search-field {
+  border-radius: 10px 0 0 10px;
+}
+
 /* ========================================================================== */
 /* Main Content Area                                                          */
 /* ========================================================================== */
 main {
   margin-bottom: 2rem;
+  margin-top: 80px;
 }
 
 .form-wider {
@@ -86,7 +108,11 @@ main {
 /* ========================================================================== */
 /* Buttons                                                                    */
 /* ========================================================================== */
-.btn-primary, .btn-info, .btn-danger, .btn-success, .btn-secondary {
+.btn-primary,
+.btn-info,
+.btn-danger,
+.btn-success,
+.btn-secondary {
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
 }
 
@@ -97,14 +123,14 @@ main {
 }
 
 .btn-primary {
-  background-color: #f1d2fb;
-  border-color: #f1d2fb;
+  background-color: #f0f8e1;
+  border-color: #f0f8e1;
   color: #333;
 }
 
 .btn-primary:hover {
-  background-color: #c57bde;
-  border-color: #c57bde;
+  background-color: #d4dfbe;
+  border-color: #d4dfbe;
 }
 
 .btn-success {
@@ -162,7 +188,7 @@ main {
 .form-buttons {
   display: flex;
   justify-content: left;
-  gap: .5rem;
+  gap: 0.5rem;
 }
 
 .custom-post-btn {
@@ -188,7 +214,8 @@ main {
 /* ========================================================================== */
 /* Cards and Tags                                                             */
 /* ========================================================================== */
-.card, .card-body {
+.card,
+.card-body {
   background-color: #fff;
   border-radius: 20px;
 }
@@ -239,7 +266,8 @@ a:hover {
   border-color: #f0eae0;
 }
 
-.alert-info, .alert-warning {
+.alert-info,
+.alert-warning {
   background-color: #fff4d2;
   color: #5a5045;
   border-color: #f4e6c8;
@@ -309,6 +337,56 @@ strong {
 }
 
 /* ========================================================================== */
+/* Responsive Design                                                          */
+/* ========================================================================== */
+@media (max-width: 576px) {
+  .container,
+  .container-lg,
+  .container-xxl {
+    text-align: center;
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+
+  main {
+    margin-top: 80px;
+  }
+
+  .btn,
+  .custom-post-btn {
+    width: 100%;
+    max-width: 300px;
+    margin-bottom: 0.75rem;
+  }
+
+  .form-buttons {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .card-body {
+    text-align: center;
+  }
+
+  .navbar .form-check {
+    margin-left: auto;
+    margin-top: 0.5rem;
+  }
+
+  .navbar-brand .logo-img {
+    height: 40px;
+  }
+
+  .navbar .nav-link {
+    font-size: 0.9rem;
+  }
+
+  #search-field {
+    height: 38px;
+  }
+}
+
+/* ========================================================================== */
 /* Dark Mode                                                                  */
 /* ========================================================================== */
 body.dark-mode {
@@ -327,6 +405,23 @@ body.dark-mode span,
 body.dark-mode .text-muted,
 body.dark-mode .form-text {
   color: #f1f1f1 !important;
+}
+
+body.dark-mode .btn-primary,
+body.dark-mode .btn-info,
+body.dark-mode .btn-danger,
+body.dark-mode .btn-success,
+body.dark-mode .btn-secondary,
+body.dark-mode .custom-post-btn {
+  box-shadow: 0 0 13px rgba(255, 255, 255, 0.3);
+}
+
+body.dark-mode .navbar-toggler {
+  border-color: #ccc;
+}
+
+body.dark-mode .navbar-toggler-icon {
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba(241,241,241, 0.9)' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
 }
 
 body.dark-mode a {
@@ -428,7 +523,7 @@ body.dark-mode .btn-link {
 }
 
 body.dark-mode .custom-post-btn {
-  background-color: #0346AB;
+  background-color: #0346ab;
   color: #000;
 }
 
@@ -467,8 +562,8 @@ body.dark-mode .btn-secondary:hover {
 }
 
 body.dark-mode aside span {
-  background-color: #0346AB !important;
-  border-color: #0346AB !important;
+  background-color: #0346ab !important;
+  border-color: #0346ab !important;
 }
 
 body.dark-mode .btn-emoji {
@@ -480,7 +575,7 @@ body.dark-mode .btn-emoji {
 body.dark-mode .tags {
   background-color: #1f1f1f !important;
   color: #f1f1f1 !important;
-  padding: .5rem;
+  padding: 0.5rem;
   font-weight: 700;
 }
 
@@ -497,4 +592,9 @@ body.dark-mode .pagination .page-item.active .page-link {
 body.dark-mode .btn-success {
   background-color: #086339;
   border-color: #086339;
+}
+
+body.dark-mode .dropdown-menu {
+  background-color: #2a2a2a;
+  color: #f1f1f1;
 }
