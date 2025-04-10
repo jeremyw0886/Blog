@@ -27,7 +27,7 @@
           <div class="flex-grow-1">
             <h4 class="mb-1">{{ profile_user.username }}</h4>
             {% if user.profile.bio %}
-            <p class="text-muted">{{ profile_user.profile.bio }}</p>
+            <p class="text-muted">{{ profile_user.profile.bio|safe }}</p>
             {% else %}
             <p class="text-muted fst-italic">No bio set yet.</p>
             {% endif %}
