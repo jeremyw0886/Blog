@@ -100,3 +100,4 @@ class CommentForm(forms.ModelForm):
                 }
             )
         }
+

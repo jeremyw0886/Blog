@@ -49,7 +49,12 @@
       <form method="post" class="mt-3">
         {% csrf_token %}
         <input type="hidden" name="post_id" value="{{ post.id }}">
-        {% bootstrap_form form %}
+      
+        <div class="mb-3">
+          <label for="{{ form.content.id_for_label }}" class="form-label visually-hidden">Comment</label>
+          {{ form.content }}
+        </div>
+      
         <button type="submit" class="btn btn-sm btn-primary">Leave Comment</button>
       </form>
       {% else %}
