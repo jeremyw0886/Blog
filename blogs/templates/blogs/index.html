@@ -29,13 +29,14 @@
       <p class="card-text text-muted">{{ blog.description }}</p>
       <a href="{% url 'blogs:edit_blog' blog.id %}" class="btn btn-sm btn-secondary ms-2">
         <i class="bi bi-pencil-square"></i> Update Description
-      </a>
+      </a><br>
       {% else %}
       <p class="text-muted fst-italic">No description added yet.</p>
       <a href="{% url 'blogs:edit_blog' blog.id %}" class="btn btn-sm btn-primary ms-2">
         <i class="bi bi-plus-square"></i> Add Description
-      </a>
+      </a><br>
       {% endif %}
+      <a href="{% url 'blogs:new_post' blog.id %}" class="btn btn-success btn-sm ms-2 mt-3 vp-add">+ Add Post</a>
 
       <div class="accordion mt-4" id="accordion-{{ blog.id }}">
         <div class="accordion-item">
@@ -45,7 +46,6 @@
               View Posts
             </button>
           </h2>
-          <a href="{% url 'blogs:new_post' blog.id %}" class="btn btn-success ms-3 mt-3 mb-3 vp-add">Add Post</a>
           <div id="collapse-{{ blog.id }}" class="accordion-collapse collapse" aria-labelledby="heading-{{ blog.id }}"
             data-bs-parent="#accordion-{{ blog.id }}">
             <div class="accordion-body">
