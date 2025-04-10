@@ -1,0 +1,36 @@
+{% extends 'blogs/base.html' %}
+{% load django_bootstrap5 %}
+
+{% block title %}Edit Profile | Inkstack{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+  <h1 class="mb-4">Edit Your Profile</h1>
+  <a href="{% url 'accounts:profile_detail' username=request.user.username %}" class="btn btn-link mb-3">&larr; Back to
+    Profile</a>
+
+  <form method="post" enctype="multipart/form-data" class="form-wider">
+    {% csrf_token %}
+
+    <div class="mb-4">
+      <h5 class="mb-3">Avatar</h5>
+      {% if request.user.profile.avatar %}
+      <div class="mb-3">
+        <img src="{{ request.user.profile.avatar.url }}" alt="Current Avatar" class="rounded-circle" width="100">
+      </div>
+      {% endif %}
+      {% bootstrap_field form.avatar %}
+    </div>
+
+    <div class="mb-4">
+      <h5 class="mb-3">Bio</h5>
+      {% bootstrap_field form.bio %}
+    </div>
+
+    <div class="form-buttons mt-3">
+      <button type="submit" class="btn btn-primary">Save Changes</button>
+      <a href="{% url 'accounts:profile_detail' username=request.user.username %}" class="btn btn-secondary">Cancel</a>
+    </div>
+  </form>
+</div>
+{% endblock %}

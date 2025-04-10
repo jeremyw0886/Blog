@@ -81,7 +81,7 @@
   </div>
   {% endfor %}
   {% else %}
-  <div class="alert alert-warning">You don’t have any blogs yet.</div>
+  <div class="alert alert-warning">You don't have any blogs yet.</div>
   {% endif %}
 
   {% else %}
@@ -90,8 +90,8 @@
     <h3 class="mb-3">Start your blogging journey</h3>
     <p class="lead">Log in or create an account to begin writing and sharing your own posts.</p>
     <div class="d-flex justify-content-center gap-3">
-      <a href="{% url 'accounts:login' %}" class="btn btn-outline-primary">Log In</a>
-      <a href="{% url 'accounts:register' %}" class="btn btn-primary">Register</a>
+      <a href="{% url 'accounts:login' %}" class="btn btn-primary">Log In</a>
+      <a href="{% url 'accounts:register' %}" class="btn btn-secondary">Register</a>
     </div>
   </div>
   {% endif %}

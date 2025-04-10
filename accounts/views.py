@@ -96,7 +96,7 @@ def edit_profile(request):
 
     return render(
         request,
-        "edit.html",
+        "accounts/edit_profile.html",
         {
             "form": form,
             "title": "Edit Profile",

@@ -284,3 +284,11 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   });
 });
+
+/* ==========================================================================
+ * Scroll Detection
+ * Why: Enhances UI responsiveness
+ * ========================================================================== */
+window.addEventListener("scroll", function () {
+  document.body.classList.toggle("scrolled", window.scrollY > 10);
+});

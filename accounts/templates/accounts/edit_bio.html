@@ -1,0 +1,17 @@
+{% extends 'blogs/base.html' %}
+{% load django_bootstrap5 %}
+
+{% block title %}Edit Bio | Inkstack{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+  <h1 class="mb-4">Edit Your Bio</h1>
+  <a href="{% url 'accounts:profile_detail' username=user.username %}" class="btn btn-link mb-3">&larr; Back to Profile</a>
+
+  <form method="post">
+    {% csrf_token %}
+    {% bootstrap_form form %}
+    <button type="submit" class="btn btn-primary mt-2">Save</button>
+  </form>
+</div>
+{% endblock %}

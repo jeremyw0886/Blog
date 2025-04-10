@@ -16,8 +16,8 @@
     <script src="{% static 'blogs/js/tinymce/tinymce.min.js' %}"></script>
   </head>
 
-  <body class="d-flex flex-column min-vh-100">
-    <nav class="navbar navbar-expand-md navbar-light bg-light mb-4 border">
+  <body class="d-flex flex-column min-vh-100 pt-5">
+    <nav class="navbar navbar-expand-md navbar-light bg-light border fixed-top shadow-sm">
       <div class="container-fluid">
         <a class="navbar-brand d-flex align-items-center" href="{% url 'blogs:index' %}">
           <img src="{% static 'blogs/img/inkstack-logo-light.png' %}" alt="Inkstack Logo" class="logo-img me-2">
@@ -78,7 +78,7 @@
       </div>
     </nav>
 
-    <main class="container flex-grow-1">
+    <main class="container flex-grow-1 pt-navbar">
       <div class="pb-2 mb-4">
         {% block page_header %}{% endblock page_header %}
       </div>

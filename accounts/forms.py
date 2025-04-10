@@ -53,14 +53,15 @@ class ProfileForm(forms.ModelForm):
         # Specifies the model for profile data
         model = Profile
         # Defines the field for bio input
-        fields = ["bio"]
+        fields = ["avatar", "bio"]
         widgets = {
             # Configures the textarea widget with attributes
             "bio": forms.Textarea(
                 attrs={
-                    "class": "form-control",
+                    "class": "rich-text",
                     "rows": 4,
-                    "placeholder": "Write a short bio...",
+                    "form-control"
+                    "placeholder": "Tell us about yourself...",
                 }
             ),
         }
