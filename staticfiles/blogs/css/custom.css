@@ -405,7 +405,9 @@ body.dark-mode h6,
 body.dark-mode span,
 body.dark-mode .text-muted,
 body.dark-mode .form-text,
-body.dark-mode p {
+body.dark-mode p,
+body.dark-mode .card-text,
+body.dark-mode label {
   color: #f1f1f1 !important;
 }
 
