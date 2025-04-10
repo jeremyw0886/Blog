@@ -2,28 +2,15 @@
 from django.core.paginator import Paginator
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse
-
-# Django HTTP and response imports
 from django.http import Http404, JsonResponse
-
-# Django authentication imports
+from collections import defaultdict
 from django.contrib.auth.decorators import login_required
-
-# Django database imports
 from django.db.models import Count, Q
-
-# Django view decorators
 from django.views.decorators.csrf import csrf_exempt, csrf_protect
 from django.views.decorators.http import require_POST
-
-# Django messaging imports
 from django.contrib import messages
-
-# Local app imports
 from .forms import BlogForm, CommentForm, PostForm
 from .models import Blog, Post, Comment
-
-# Third-party app imports
 from taggit.models import Tag
 
 
@@ -119,6 +106,12 @@ def edit_blog(request, blog_id):
     # Fetch posts for display
     posts = Post.objects.filter(blog=blog).order_by("-created_at")
 
+    # Collect comments for each post
+    comments_by_post = defaultdict(list)
+    for post in posts:
+        for comment in post.comments.all():
+            comments_by_post[post.id].append(comment)
+
     if request.method == "POST":
         # Process blog edit form
         blog_form = BlogForm(request.POST, instance=blog)
@@ -136,6 +129,7 @@ def edit_blog(request, blog_id):
         {
             "blog_form": blog_form,
             "posts": posts,
+            "comments_by_post": comments_by_post,
             "cancel_url": reverse("blogs:blog_detail", args=[blog.id]),
         },
     )
@@ -293,10 +287,15 @@ def edit_comment(request, comment_id):
 @login_required
 @require_POST
 def delete_comment(request, comment_id):
-    """Allow comment author to delete their comment."""
-    comment = get_object_or_404(Comment, id=comment_id, user=request.user)
-    comment.delete()
-    return JsonResponse({"success": True, "comment_id": comment_id})
+    """Allow comment author or post owner to delete a comment."""
+    comment = get_object_or_404(Comment, id=comment_id)
+
+    # Ensure the user is either the comment author or the post owner
+    if comment.user == request.user or comment.post.blog.owner == request.user:
+        comment.delete()
+        return JsonResponse({"success": True, "comment_id": comment_id})
+    else:
+        return JsonResponse({"error": "Permission denied"}, status=403)
 
 
 @login_required
