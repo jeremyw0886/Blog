@@ -90,7 +90,7 @@
               </div>
 
               {% if user.is_authenticated %}
-              <a href="{% url 'blogs:post_detail' post.id %}" class="custom-post-btn mb-3">View Full Post</a>
+              <a href="{% url 'blogs:post_detail' post.id %}" class="custom-post-btn mb-3">Leave Comment</a>
               {% else %}
               <a href="{% url 'accounts:login' %}?next={% url 'blogs:post_detail' post.id %}"
                 class="custom-post-btn mb-3">View Full Post</a>
