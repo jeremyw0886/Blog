@@ -28,7 +28,7 @@
       {% if blog.description %}
       <p class="card-text text-muted">{{ blog.description }}</p>
       <a href="{% url 'blogs:edit_blog' blog.id %}" class="btn btn-sm btn-secondary ms-2">
-        <i class="bi bi-pencil-square"></i> Update Description
+        <i class="bi bi-pencil-square"></i> Modify
       </a><br>
       {% else %}
       <p class="text-muted fst-italic">No description added yet.</p>
