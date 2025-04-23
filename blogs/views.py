@@ -93,7 +93,7 @@ def new_blog(request):
             new_blog = form.save(commit=False)
             new_blog.owner = request.user
             new_blog.save()
-            return redirect("blogs:blog_detail", blog_id=new_blog.id)
+            return redirect("blogs:index")
 
     context = {"form": form}
     return render(request, "blogs/new_blog.html", context)
