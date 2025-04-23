@@ -113,12 +113,16 @@ def edit_blog(request, blog_id):
             comments_by_post[post.id].append(comment)
 
     if request.method == "POST":
-        # Process blog edit form
-        blog_form = BlogForm(request.POST, instance=blog)
-        if blog_form.is_valid():
-            blog_form.save()
-            messages.success(request, "Blog updated successfully.")
-            return redirect("blogs:edit_blog", blog_id=blog.id)
+        if "delete" in request.POST:
+            blog.delete()
+            messages.success(request, "Blog deleted successfully.")
+            return redirect("blogs:index")
+
+    blog_form = BlogForm(request.POST, instance=blog)
+    if blog_form.is_valid():
+        blog_form.save()
+        messages.success(request, "Blog updated successfully.")
+        return redirect("blogs:edit_blog", blog_id=blog.id)
     else:
         # Display blog edit form
         blog_form = BlogForm(instance=blog)
@@ -130,7 +134,7 @@ def edit_blog(request, blog_id):
             "blog_form": blog_form,
             "posts": posts,
             "comments_by_post": comments_by_post,
-            "cancel_url": reverse("blogs:blog_detail", args=[blog.id]),
+            "cancel_url": reverse("blogs:index"),
         },
     )
 
