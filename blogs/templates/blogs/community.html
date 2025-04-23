@@ -58,7 +58,7 @@
 
               <div class="collapse mt-2" id="post-{{ post.id }}">
                 <div class="card card-body bg-light">
-                  {{ post.content|striptags|linebreaksbr }}
+                  {{ post.content|striptags|safe }}
                 </div>
               </div>
 
