@@ -44,7 +44,7 @@ class Post(models.Model):
     # Auto-update modification timestamp
     updated_at = models.DateTimeField(auto_now=True)
     # Manages post tags
-    tags = TaggableManager()
+    tags = TaggableManager(blank=True)
     # Count of likes on the post
     likes = models.PositiveIntegerField(default=0)
     # Count of love reactions on the post
