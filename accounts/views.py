@@ -1,15 +1,9 @@
-# Django core imports
+
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse
-
-# Django authentication imports
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
-
-# Local app imports
 from .forms import AvatarForm, ProfileForm, RegistrationForm
-
-# Other app imports
 from blogs.models import Blog, Post, Comment
 
 

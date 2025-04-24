@@ -4,6 +4,16 @@
 {% block title %}Edit Blog & Posts | Inkstack{% endblock %}
 
 {% block content %}
+{% if messages %}
+<div class="container mt-3">
+  {% for message in messages %}
+  <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+    {{ message }}
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+  </div>
+  {% endfor %}
+</div>
+{% endif %}
 <div class="container mt-4">
   <h1 class="mb-4">Edit Blog</h1>
   <a href="{% url 'blogs:index' %}" class="btn btn-link mb-3">&larr; Back to Dashboard</a>
@@ -22,28 +32,29 @@
 
   <hr class="my-5">
 
-  {% for post in posts %}
-  {% if post.comments.all %}
+{% for post in posts %}
   <div class="mt-5">
     <h3>Comments on "{{ post.title }}"</h3>
-    {% for comment in post.comments.all %}
-    <div id="comment-{{ comment.id }}" class="mb-3 p-2 border rounded bg-light position-relative">
-      <div class="ms-2">
-        <strong>{{ comment.user.username }}</strong>:
-        <p class="mb-1">{{ comment.content }}</p>
-      </div>
-      {% if post.blog.owner == request.user %}
-      <button class="btn-close position-absolute top-0 end-0 m-2 delete-comment-btn" data-comment-id="{{ comment.id }}"
-        aria-label="Delete"></button>
-      {% endif %}
-    </div>
-    {% endfor %}
-  </div>
-  {% endif %}
-  {% endfor %}
 
-  {% if not posts|length or not posts.0.comments.all %}
-  <p class="text-muted">No comments yet.</p>
-  {% endif %}
+    {% if post.comments.exists %}
+      {% for comment in post.comments.all %}
+        <div id="comment-{{ comment.id }}" class="mb-3 p-2 border rounded bg-light position-relative">
+          <div class="ms-2">
+            <strong>{{ comment.user.username }}</strong>:
+            <p class="mb-1">{{ comment.content }}</p>
+          </div>
+          {% if post.blog.owner == request.user %}
+            <button class="btn-close position-absolute top-0 end-0 m-2 delete-comment-btn"
+                    data-comment-id="{{ comment.id }}"
+                    aria-label="Delete"
+                    title="Delete comment"></button>
+          {% endif %}
+        </div>
+      {% endfor %}
+    {% else %}
+      <p class="text-muted fst-italic">No comments yet for this post.</p>
+    {% endif %}
+  </div>
+{% endfor %}
 </div>
 {% endblock %}

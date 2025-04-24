@@ -1,10 +1,5 @@
-# Django core imports
 from django.shortcuts import render, redirect
-
-# Django authentication imports
 from django.contrib.auth.decorators import login_required
-
-# Local app imports
 from .forms import AvatarForm, RegistrationForm
 from .models import Profile
 

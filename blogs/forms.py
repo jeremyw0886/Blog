@@ -1,10 +1,5 @@
-# Django core imports
 from django import forms
-
-# Third-party app imports
 from taggit.forms import TagWidget
-
-# Local app imports
 from .models import Blog, Post, Comment
 
 

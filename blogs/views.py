@@ -1,4 +1,3 @@
-# Django core imports
 from django.core.paginator import Paginator
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse
@@ -93,6 +92,7 @@ def new_blog(request):
             new_blog = form.save(commit=False)
             new_blog.owner = request.user
             new_blog.save()
+            form.save_m2m()
             return redirect("blogs:index")
 
     context = {"form": form}
@@ -103,28 +103,21 @@ def new_blog(request):
 def edit_blog(request, blog_id):
     """Allow blog owner to edit blog details."""
     blog = get_object_or_404(Blog, id=blog_id, owner=request.user)
-    # Fetch posts for display
     posts = Post.objects.filter(blog=blog).order_by("-created_at")
 
-    # Collect comments for each post
-    comments_by_post = defaultdict(list)
-    for post in posts:
-        for comment in post.comments.all():
-            comments_by_post[post.id].append(comment)
-
+    # Handle form submission
     if request.method == "POST":
         if "delete" in request.POST:
             blog.delete()
             messages.success(request, "Blog deleted successfully.")
             return redirect("blogs:index")
 
-    blog_form = BlogForm(request.POST, instance=blog)
-    if blog_form.is_valid():
-        blog_form.save()
-        messages.success(request, "Blog updated successfully.")
-        return redirect("blogs:edit_blog", blog_id=blog.id)
+        blog_form = BlogForm(request.POST, instance=blog)
+        if blog_form.is_valid():
+            blog_form.save()
+            messages.success(request, "Blog updated successfully.")
+            return redirect("blogs:edit_blog", blog_id=blog.id)
     else:
-        # Display blog edit form
         blog_form = BlogForm(instance=blog)
 
     return render(
@@ -133,7 +126,6 @@ def edit_blog(request, blog_id):
         {
             "blog_form": blog_form,
             "posts": posts,
-            "comments_by_post": comments_by_post,
             "cancel_url": reverse("blogs:index"),
         },
     )
@@ -158,6 +150,7 @@ def new_post(request, blog_id):
             new_post = form.save(commit=False)
             new_post.blog = blog
             new_post.save()
+            form.save_m2m()
             return redirect("blogs:index")
     context = {"form": form, "blog": blog}
     return render(request, "blogs/new_post.html", context)
@@ -305,7 +298,7 @@ def delete_comment(request, comment_id):
 @login_required
 def community_view(request):
     """Display community posts with pagination and search."""
-    query = request.GET.get("search", "")
+    query = request.GET.get("search", "").lstrip("#")
 
     # Fetch posts with related blog and owner data
     post_list = Post.objects.select_related("blog", "blog__owner")
@@ -313,8 +306,10 @@ def community_view(request):
     if query:
         # Filter posts by search query
         post_list = post_list.filter(
-            Q(title__icontains=query) | Q(content__icontains=query)
-        )
+            Q(title__icontains=query) | 
+            Q(content__icontains=query) |
+            Q(tags__name__icontains=query)
+        ).distinct()
 
     # Order posts by creation date
     post_list = post_list.order_by("-created_at")

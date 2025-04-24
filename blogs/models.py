@@ -1,13 +1,7 @@
-# Django core imports
 from django.db import models
-
-# Django authentication imports
 from django.contrib.auth.models import User
-
-# Third-party app imports
 from taggit.managers import TaggableManager
 
-# Default visibility setting for posts
 is_public = models.BooleanField(default=True)
 
 

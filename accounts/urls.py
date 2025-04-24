@@ -1,14 +1,7 @@
-# Django configuration imports
 from django.conf import settings
 from django.conf.urls.static import static
-
-# Django URL imports
 from django.urls import path
-
-# Django authentication imports
 from django.contrib.auth import views as auth_views
-
-# Local app imports
 from . import views
 
 # Namespace for URL patterns

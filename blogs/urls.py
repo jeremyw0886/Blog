@@ -1,7 +1,4 @@
-# Django URL imports
 from django.urls import path
-
-# Local app imports
 from . import views
 
 # Namespace for blog-related URL patterns

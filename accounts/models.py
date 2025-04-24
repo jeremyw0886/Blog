@@ -1,14 +1,7 @@
-# Django core imports
 from django.db import models
-
-# Django authentication imports
 from django.contrib.auth.models import User
-
-# Django signal imports
 from django.db.models.signals import post_save
 from django.dispatch import receiver
-
-# Django template imports
 from django.templatetags.static import static
 
 def default_avatar_path():

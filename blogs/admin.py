@@ -1,7 +1,4 @@
-# Django admin imports
 from django.contrib import admin
-
-# Local app imports
 from .models import Blog, Post
 
 """

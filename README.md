@@ -6,7 +6,7 @@ rich text editing, emoji reactions, user profiles with avatars, and a community-
 
 ---
 
-## 🚀 Features
+## Features
 
 - **Blog & Post Creation** – Start a blog, create posts, and keep everything organized.
 - **Dark Mode Toggle** – Personalized browsing experience.

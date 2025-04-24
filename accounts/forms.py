@@ -1,11 +1,6 @@
-# Django authentication imports
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
-
-# Django core imports
 from django import forms
-
-# Local app imports
 from .models import Profile
 
 
